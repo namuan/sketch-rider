@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: dev.deskriders.sketchrider
+---
+testFramework: junit
+sourceLanguage: java
