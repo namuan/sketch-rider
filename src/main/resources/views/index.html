@@ -5,13 +5,13 @@
     <title>SketchRider</title>
 </head>
 <body>
-<h2 th:if="${security}">username: <span th:text="${security}"></span></h2>
-<h2 th:unless="${security}">username: Anonymous</h2>
+<h2 th:if="${loggedIn}">username: <span th:text="${username}"></span> - <span th:text="${uid}"></span></h2>
+<h2 th:unless="${loggedIn}">username: Anonymous</h2>
 <nav>
     <ul>
-        <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
-        <li th:if="${security}"><a href="#">Create New Diagram</a></li>
-        <li th:if="${security}"><a href="/logout">Logout</a></li>
+        <li th:unless="${loggedIn}"><a href="/oauth/login/github">Login</a></li>
+        <li th:if="${loggedIn}"><a href="#">Create New Diagram</a></li>
+        <li th:if="${loggedIn}"><a href="/logout">Logout</a></li>
     </ul>
 </nav>
 </body>

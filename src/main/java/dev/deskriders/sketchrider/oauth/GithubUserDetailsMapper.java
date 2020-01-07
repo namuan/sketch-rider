@@ -1,5 +1,6 @@
 package dev.deskriders.sketchrider.oauth;
 
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.security.authentication.UserDetails;
 import io.micronaut.security.oauth2.endpoint.token.response.OauthUserDetailsMapper;
 import io.micronaut.security.oauth2.endpoint.token.response.TokenResponse;
@@ -12,7 +13,7 @@ import java.util.Collections;
 @Named("github")
 @Singleton
 public class GithubUserDetailsMapper implements OauthUserDetailsMapper {
-    public static final String TOKEN_PREFIX = "token ";
+    public static final String BEARER_PREFIX = "bearer ";
     public static final String CLAIM = "claim";
 
     private final GithubApiClient githubApiClient;
@@ -23,11 +24,11 @@ public class GithubUserDetailsMapper implements OauthUserDetailsMapper {
 
     @Override
     public Publisher<UserDetails> createUserDetails(TokenResponse tokenResponse) {
-        return githubApiClient.getUser(TOKEN_PREFIX + tokenResponse.getAccessToken())
+        return githubApiClient.getUser(BEARER_PREFIX + tokenResponse.getAccessToken())
                 .map(githubUser -> new UserDetails(
                         githubUser.getLogin(),
-                        Collections.singletonList(CLAIM),
-                        Collections.emptyMap()
+                        Collections.emptyList(),
+                        CollectionUtils.mapOf("id", githubUser.getId())
                 ));
     }
 }

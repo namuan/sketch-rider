@@ -14,7 +14,7 @@ micronaut:
           client-id: "${GITHUB_CLIENT_ID}"
           client-secret: "${GITHUB_CLIENT_SECRET}"
           scopes:
-            - user:email
+            - read:user
           authorization:
             url: 'https://github.com/login/oauth/authorize'
           token:

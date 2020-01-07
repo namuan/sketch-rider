@@ -8,5 +8,5 @@ import lombok.Setter;
 public class GithubUser {
     String login;
     String name;
-    String email;
+    String id;
 }
