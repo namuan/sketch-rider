@@ -28,6 +28,10 @@ dependencies {
     annotationProcessor     "io.micronaut:micronaut-inject-java"
     annotationProcessor     "io.micronaut:micronaut-validation"
 
+    annotationProcessor     "io.micronaut:micronaut-security"
+    implementation          "io.micronaut:micronaut-security-jwt"
+    implementation          "io.micronaut.configuration:micronaut-security-oauth2"
+
     implementation          platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation          "io.micronaut:micronaut-inject"
     implementation          "io.micronaut:micronaut-validation"

@@ -13,3 +13,4 @@ out/
 .classpath
 .serverless/
 infra/node_modules
+.env

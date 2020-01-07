@@ -5,8 +5,14 @@
     <title>SketchRider</title>
 </head>
 <body>
-<div>
-    Login | SignUp | Create New Diagram
-</div>
+<h2 th:if="${security}">username: <span th:text="${security}"></span></h2>
+<h2 th:unless="${security}">username: Anonymous</h2>
+<nav>
+    <ul>
+        <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
+        <li th:if="${security}"><a href="#">Create New Diagram</a></li>
+        <li th:if="${security}"><a href="/logout">Logout</a></li>
+    </ul>
+</nav>
 </body>
 </html>

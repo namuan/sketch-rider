@@ -1,3 +1,43 @@
 micronaut:
   application:
-    name: sketch-rider
+    name: sketchrider
+
+# oauth
+---
+micronaut:
+  security:
+    enabled: true
+    oauth2:
+      enabled: true
+      clients:
+        github:
+          client-id: "${GITHUB_CLIENT_ID}"
+          client-secret: "${GITHUB_CLIENT_SECRET}"
+          scopes:
+            - user:email
+          authorization:
+            url: 'https://github.com/login/oauth/authorize'
+          token:
+            url: 'https://github.com/login/oauth/access_token'
+            auth-method: client-secret-post
+    endpoints:
+      logout:
+        enabled: true
+        get-allowed: true
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: "${JWT_SIG_GENERATOR}"
+
+# client
+---
+micronaut:
+  http:
+    services:
+      githubv3:
+        url: "https://api.github.com"
