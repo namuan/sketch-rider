@@ -12,7 +12,7 @@
                 <button class="btn btn-primary" id="btn-render-diagram">Build</button>
                 <div class="form-group">
                     <label for="diagram-source">Diagram source</label>
-                    <textarea class="form-control" id="diagram-source" rows="50"></textarea>
+                    <textarea class="form-control" id="diagram-source" rows="10"></textarea>
                 </div>
             </form>
         </div>
@@ -20,7 +20,7 @@
         <div class="col">
             <p>Generated Diagram</p>
             <div>
-                <img class="diagram" src="/static/images/stock-plantuml.jpg"></img>
+                <img id="diagram" src="/static/images/stock-plantuml.jpg"></img>
             </div>
 
         </div>
@@ -30,12 +30,18 @@
 </div>
 
 <script type="text/javascript">
+    function compress(e) {
+        e = unescape(encodeURIComponent(e));
+        return encode64(RawDeflate.deflate(e));
+    }
+
     $(document).ready(function () {
         $("#btn-render-diagram").click(function () {
             const diagramSource = $('#diagram-source').val();
             const wrappedDiagramSource = "@startuml\n" + diagramSource + "\n@enduml";
-            const diagramUrl = "/render/" + btoa(wrappedDiagramSource) + "?dt=puml";
-            $(".diagram").attr("src", diagramUrl);
+            const encodedString = compress(wrappedDiagramSource);
+            const diagramUrl = "/render/" + encodedString + "?dt=puml";
+            $("#diagram").attr("src", diagramUrl);
             return false;
         });
     });

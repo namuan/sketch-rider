@@ -44,6 +44,7 @@ dependencies {
     implementation          "javax.annotation:javax.annotation-api"
     implementation          "io.micronaut:micronaut-http-server-netty"
     implementation          "io.micronaut:micronaut-http-client"
+    implementation          "net.sourceforge.plantuml:plantuml:${plantUmlVersion}"
 
     runtimeOnly             "ch.qos.logback:logback-classic:${logbackVersion}"
     runtimeOnly             "org.thymeleaf:thymeleaf:${thymeleafVersion}"
