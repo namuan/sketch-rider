@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public class HomeController {
 
     @Secured(SecurityRule.IS_ANONYMOUS)
-    @View(value = "index")
+    @View(value = "home/index")
     @Get(produces = MediaType.TEXT_HTML)
     public HttpResponse index(@Nullable Authentication authentication) {
         return HttpResponse.ok();

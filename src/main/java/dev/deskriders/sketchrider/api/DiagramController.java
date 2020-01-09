@@ -18,13 +18,13 @@ import java.util.UUID;
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class DiagramController {
 
-    @Get(value = "/diagrams/new", produces = MediaType.TEXT_HTML)
+    @Get(value = "/diagrams/new")
     public HttpResponse createNewDiagram() throws URISyntaxException {
         String diagramId = UUID.randomUUID().toString();
         return HttpResponse.redirect(new URI("/diagrams/" + diagramId));
     }
 
-    @View(value = "/diagrams/edit")
+    @View(value = "diagrams/edit")
     @Get(value = "/diagrams/{diagramId}", produces = MediaType.TEXT_HTML)
     public Map<String, Object> diagram(String diagramId) {
         return CollectionUtils.mapOf("diagramId", diagramId);

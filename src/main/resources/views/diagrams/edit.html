@@ -1,17 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:replace="~{fragments/layout :: layout(~{::title}, ~{::#content}, ~{::script})}" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>SketchRider</title>
+    <title>SketchRider :: Diagram</title>
 </head>
-<body>
-<h2 th:if="${security}">username: <span th:text="${security.name}"></span> - <span th:text="${security.attributes.id}"></span></h2>
-<h3>New Diagram <span th:text="${diagramId}"></span> </h3>
-<nav>
-    <ul>
-        <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
-        <li th:if="${security}"><a href="/logout">Logout</a></li>
-    </ul>
-</nav>
-</body>
+<div id="content" class="container-fluid">
+
+    <h1>PlantUML Editor :: <span th:text="${diagramId}"></span></h1>
+
+    <div class="row">
+        <div class="col-5">
+            <form>
+                <button class="btn btn-primary" id="btn-render-diagram">Build</button>
+                <div class="form-group">
+                    <label for="diagram-source">Diagram source</label>
+                    <textarea class="form-control" id="diagram-source" rows="50"></textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class="col">
+            <p>Generated Diagram</p>
+            <div>
+                <img class="diagram" src="/static/images/stock-plantuml.jpg"></img>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btn-render-diagram").click(function () {
+            const diagramSource = $('#diagram-source').val();
+            const wrappedDiagramSource = "@startuml\n" + diagramSource + "\n@enduml";
+            const diagramUrl = "/render/" + btoa(wrappedDiagramSource) + "?dt=puml";
+            $(".diagram").attr("src", diagramUrl);
+            return false;
+        });
+    });
+</script>
+
 </html>

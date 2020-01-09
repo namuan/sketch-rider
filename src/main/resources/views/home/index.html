@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="en" th:replace="~{fragments/layout :: layout(~{::title}, ~{::#content}, ~{::script})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SketchRider :: Home</title>
+</head>
+<body>
+<div id="content">
+    <h2 th:if="${security}">username: <span th:text="${security.name}"></span> - <span th:text="${security.attributes.id}"></span></h2>
+    <h2 th:unless="${security}">username: Anonymous</h2>
+    <nav>
+        <ul>
+            <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
+            <li th:if="${security}"><a href="/diagrams/new">Create New Diagram</a></li>
+            <li th:if="${security}"><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</div>
+</body>
+
+<script></script>

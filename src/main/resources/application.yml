@@ -7,6 +7,12 @@ micronaut:
 micronaut:
   security:
     enabled: true
+    intercept-url-map:
+      -
+        pattern: /static/**
+        http-method: GET
+        access:
+          - isAnonymous()
     oauth2:
       enabled: true
       clients:
@@ -41,3 +47,13 @@ micronaut:
     services:
       githubv3:
         url: "https://api.github.com"
+
+# static resources
+---
+micronaut:
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/**"
+        paths: "classpath:public"
