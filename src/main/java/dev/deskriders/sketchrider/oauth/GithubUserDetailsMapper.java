@@ -4,6 +4,7 @@ import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.security.authentication.UserDetails;
 import io.micronaut.security.oauth2.endpoint.token.response.OauthUserDetailsMapper;
 import io.micronaut.security.oauth2.endpoint.token.response.TokenResponse;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.reactivestreams.Publisher;
 
 import javax.inject.Named;
@@ -28,7 +29,11 @@ public class GithubUserDetailsMapper implements OauthUserDetailsMapper {
                 .map(githubUser -> new UserDetails(
                         githubUser.getLogin(),
                         Collections.emptyList(),
-                        CollectionUtils.mapOf("id", githubUser.getId())
+                        CollectionUtils.mapOf("id", sha(githubUser.getId()))
                 ));
+    }
+
+    private String sha(String source) {
+        return DigestUtils.sha256Hex(source);
     }
 }

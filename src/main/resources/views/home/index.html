@@ -10,7 +10,7 @@
     <nav>
         <ul>
             <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
-            <li th:if="${security}"><a href="/diagrams/new">Create New Diagram</a></li>
+            <li ><a href="/diagrams/new">Create New Diagram</a></li>
             <li th:if="${security}"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
