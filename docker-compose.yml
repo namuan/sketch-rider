@@ -8,8 +8,6 @@ services:
     volumes:
       - ~/.aws:/root/.aws
     environment:
-      APP_PRINT_DOCUMENTS_DB_TABLE: local-print-documents
-      APP_DOMAIN_NAME: http://localhost:8080
       APP_DYNAMO: http://localhost:8000
       MICRONAUT_ENVIRONMENTS: dev
     ports:

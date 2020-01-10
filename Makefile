@@ -12,7 +12,7 @@ dynamo-local: ## Start local dynamo database
 	docker-compose up -d dynamo
 
 setup-local: dynamo-local ## Setup local environment (DynamoDb tables etc)
-	aws dynamodb create-table --cli-input-json file://development/create-print-documents-table.json --endpoint-url http://localhost:8000
+	aws dynamodb create-table --cli-input-json file://infra/create-sr-table.json --endpoint-url http://localhost:8000
 
 run-docker: docker ## Runs the service in a Docker container
 	docker-compose up

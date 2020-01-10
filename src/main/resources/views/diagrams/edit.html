@@ -9,6 +9,7 @@
     <div class="row">
         <div class="col-5">
             <form>
+                <input id="docId" type="hidden" th:value="${diagramId}">
                 <button class="btn btn-primary" id="btn-render-diagram">Build</button>
                 <button th:if="${security}" class="btn btn-secondary" id="btn-save-diagram">Save</button>
                 <div class="form-group">
@@ -50,17 +51,18 @@
         $("#btn-save-diagram").click(function (ev) {
             ev.preventDefault();
 
+            const docId = $('#docId').val();
             const diagramSource = $('#diagram-source').val();
             const wrappedDiagramSource = "@startuml\n" + diagramSource + "\n@enduml";
             const encodedString = compress(wrappedDiagramSource);
             $.ajax({
                 type: 'POST',
                 url: '/user-diagrams',
-                data: JSON.stringify({diagramCode: encodedString}),
+                data: JSON.stringify({docId: docId, diagramCode: encodedString}),
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {
-                    alert("Success: " + data);
+                    alert("Success: " + data.id);
                 },
                 failure: function (err) {
                     alert("Error:" + err);

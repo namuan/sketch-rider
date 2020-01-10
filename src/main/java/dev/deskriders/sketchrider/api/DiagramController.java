@@ -21,7 +21,7 @@ public class DiagramController {
     @Get(value = "/diagrams/new")
     public HttpResponse createNewDiagram() throws URISyntaxException {
         String diagramId = UUID.randomUUID().toString();
-        return HttpResponse.redirect(new URI("/diagrams/" + diagramId));
+        return HttpResponse.temporaryRedirect(new URI("/diagrams/" + diagramId));
     }
 
     @View(value = "diagrams/edit")

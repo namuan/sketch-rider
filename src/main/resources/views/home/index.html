@@ -10,10 +10,16 @@
     <nav>
         <ul>
             <li th:unless="${security}"><a href="/oauth/login/github">Login</a></li>
-            <li ><a href="/diagrams/new">Create New Diagram</a></li>
-            <li th:if="${security}"><a href="/logout">Logout</a></li>
+<!--            <li ><a href="/diagrams/new">Create New Diagram</a></li>-->
+<!--            <li th:if="${security}"><a href="/logout">Logout</a></li>-->
         </ul>
     </nav>
+    <form action="/diagrams/new">
+        <button class="btn btn-primary">Create New Diagram</button>
+    </form>
+    <form action="/logout">
+        <button th:if="${security}" class="btn btn-primary">Logout</button>
+    </form>
 </div>
 </body>
 
