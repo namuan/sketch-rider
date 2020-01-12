@@ -25,6 +25,12 @@ public class UserDocumentEntity {
     @DynamoDBAttribute(attributeName = "OwnerName")
     private String ownerName;
 
+    @DynamoDBAttribute(attributeName = "DocumentType")
+    private String documentType;
+
+    @DynamoDBAttribute(attributeName = "DocumentStatus")
+    private String documentStatus;
+
     public void setOwnerId(String id) {
         if (id.startsWith("Owner-")) {
             this.id = id;

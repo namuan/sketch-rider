@@ -23,4 +23,8 @@ public class CreateUserDocumentRequest {
     @JsonProperty
     String documentId;
 
+    @NotNull
+    @JsonProperty
+    String documentType;
+
 }

@@ -3,7 +3,9 @@ package dev.deskriders.sketchrider.repository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import dev.deskriders.sketchrider.api.exception.BadRequestException;
+import dev.deskriders.sketchrider.api.requests.CreateUserDocumentRequest;
 import dev.deskriders.sketchrider.config.DbConfig;
+import dev.deskriders.sketchrider.model.DocumentStatus;
 import dev.deskriders.sketchrider.model.UserDocumentEntity;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,15 +23,17 @@ public class UserDocumentRepository {
         this.dbConfig = dbConfig;
     }
 
-    public String saveUserDocument(String documentId, String ownerId, String documentCode) {
+    public String saveUserDocument(String ownerId, CreateUserDocumentRequest documentRequest) {
         UserDocumentEntity entity = new UserDocumentEntity();
         entity.setOwnerId(ownerId);
-        entity.setDocumentId(documentId);
-        entity.setDocumentCode(documentCode);
+        entity.setDocumentId(documentRequest.getDocumentId());
+        entity.setDocumentCode(documentRequest.getDocumentCode());
         entity.setCreatedDateTime(LocalDateTime.now());
+        entity.setDocumentType(documentRequest.getDocumentType());
+        entity.setDocumentStatus(DocumentStatus.ACTIVE.name());
         dbConfig.dynamoDbMapper().save(entity);
-        log.info("Created document {} for user {}", documentId, ownerId);
-        return documentId;
+        log.info("Created document {} for user {}", documentRequest.getDocumentId(), ownerId);
+        return documentRequest.getDocumentId();
     }
 
     public void deleteUserDocument(String ownerId, String documentId) {
@@ -37,8 +41,9 @@ public class UserDocumentRepository {
         if (existingUserDocumentEntity == null) {
             throw new BadRequestException("Unable to find document " + documentId);
         }
-
-        dbConfig.dynamoDbMapper().delete(existingUserDocumentEntity);
+        existingUserDocumentEntity.setDocumentStatus(DocumentStatus.DELETED.name());
+        log.info("Deleted document {} for user {}", existingUserDocumentEntity.getDocumentId(), ownerId);
+        dbConfig.dynamoDbMapper().save(existingUserDocumentEntity);
     }
 
     public List<UserDocumentEntity> listUserDocuments(String ownerId) {

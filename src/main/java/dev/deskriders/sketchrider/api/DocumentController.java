@@ -13,6 +13,7 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.View;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,7 +41,7 @@ public class DocumentController {
 
     @View(value = "documents/edit")
     @Get(value = "/documents/{documentId}", produces = MediaType.TEXT_HTML)
-    public Map<String, Object> editDocument(String documentId, Authentication authentication) throws IOException {
+    public Map<String, Object> editDocument(String documentId, @Nullable Authentication authentication) throws IOException {
         String defaultDocumentCode = "@startuml\nA->B: test\nB->C: hello\n@enduml";
         if (authentication != null) {
             String ownerId = (String) authentication.getAttributes().get("id");

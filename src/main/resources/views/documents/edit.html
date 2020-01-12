@@ -58,7 +58,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/user-documents',
-                data: JSON.stringify({documentId: documentId, documentCode: encodedString}),
+                data: JSON.stringify({documentId: documentId, documentCode: encodedString, documentType: 'puml'}),
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {

@@ -32,9 +32,8 @@ public class UserDocumentController {
     ) {
         String ownerId = (String) authentication.getAttributes().get("id");
         userDocumentRepository.saveUserDocument(
-                createUserDocumentRequest.getDocumentId(),
                 ownerId,
-                createUserDocumentRequest.getDocumentCode()
+                createUserDocumentRequest
         );
 
         return HttpResponse.created(CollectionUtils.mapOf("id", createUserDocumentRequest.getDocumentId()));
