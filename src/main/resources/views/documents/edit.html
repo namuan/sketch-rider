@@ -43,8 +43,7 @@
             ev.preventDefault();
 
             const documentSource = $('#document-source').val();
-            const wrappedDocumentSource = "@startuml\n" + documentSource + "\n@enduml";
-            const encodedString = compress(wrappedDocumentSource);
+            const encodedString = compress(documentSource);
             const documentUrl = "/render/" + encodedString + "?dt=puml";
             $("#document").attr("src", documentUrl);
         });

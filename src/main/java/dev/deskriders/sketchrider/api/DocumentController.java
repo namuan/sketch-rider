@@ -1,6 +1,7 @@
 package dev.deskriders.sketchrider.api;
 
 import dev.deskriders.sketchrider.model.UserDocumentEntity;
+import dev.deskriders.sketchrider.renderer.PlantUmlRenderer;
 import dev.deskriders.sketchrider.repository.UserDocumentRepository;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.http.HttpResponse;
@@ -12,6 +13,7 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.View;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -23,9 +25,11 @@ import java.util.UUID;
 public class DocumentController {
 
     private UserDocumentRepository userDocumentRepository;
+    private PlantUmlRenderer plantUmlRenderer;
 
-    public DocumentController(UserDocumentRepository userDocumentRepository) {
+    public DocumentController(UserDocumentRepository userDocumentRepository, PlantUmlRenderer plantUmlRenderer) {
         this.userDocumentRepository = userDocumentRepository;
+        this.plantUmlRenderer = plantUmlRenderer;
     }
 
     @Get(value = "/documents/new")
@@ -36,20 +40,21 @@ public class DocumentController {
 
     @View(value = "documents/edit")
     @Get(value = "/documents/{documentId}", produces = MediaType.TEXT_HTML)
-    public Map<String, Object> editDocument(String documentId, Authentication authentication) {
+    public Map<String, Object> editDocument(String documentId, Authentication authentication) throws IOException {
+        String defaultDocumentCode = "@startuml\nA->B: test\nB->C: hello\n@enduml";
         if (authentication != null) {
             String ownerId = (String) authentication.getAttributes().get("id");
             UserDocumentEntity userDocumentEntity = userDocumentRepository.loadUserDocument(ownerId, documentId);
             if (userDocumentEntity == null) {
-                return CollectionUtils.mapOf("documentId", documentId);
+                return CollectionUtils.mapOf("documentId", documentId, "documentCode", defaultDocumentCode);
             } else {
                 return CollectionUtils.mapOf(
                         "documentId", userDocumentEntity.getDocumentId(),
-                        "documentCode", userDocumentEntity.getDocumentCode()
+                        "documentCode", this.plantUmlRenderer.convertToSource(userDocumentEntity.getDocumentCode())
                 );
             }
         }
-        return CollectionUtils.mapOf("documentId", documentId);
+        return CollectionUtils.mapOf("documentId", documentId, "documentCode", defaultDocumentCode);
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)

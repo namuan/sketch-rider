@@ -22,4 +22,8 @@ public class PlantUmlRenderer {
         return plantUmlDocumentStream.toByteArray();
     }
 
+    public String convertToSource(String encodedDocumentSource) throws IOException {
+        return transcoder.decode(encodedDocumentSource);
+    }
+
 }
