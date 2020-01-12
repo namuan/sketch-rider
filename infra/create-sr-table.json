@@ -1,13 +1,27 @@
 {
   "TableName": "sketch-rider",
   "KeySchema": [
-    { "AttributeName": "DocId", "KeyType": "HASH" }
+    {
+      "AttributeName": "Id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "Metadata",
+      "KeyType": "RANGE"
+    }
   ],
   "AttributeDefinitions": [
-    { "AttributeName": "DocId", "AttributeType": "S" }
+    {
+      "AttributeName": "Id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "Metadata",
+      "AttributeType": "S"
+    }
   ],
   "ProvisionedThroughput": {
-    "ReadCapacityUnits": 1,
-    "WriteCapacityUnits": 1
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
   }
 }

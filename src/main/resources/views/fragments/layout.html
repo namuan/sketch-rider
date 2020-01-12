@@ -12,6 +12,11 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+<h2 th:if="${security}">username: <span th:text="${security.name}"></span> - <span th:text="${security.attributes.name}"></span></h2>
+<h2 th:unless="${security}">username: Anonymous</h2>
+<form action="/logout">
+    <button th:if="${security}" class="btn btn-primary">Logout</button>
+</form>
 <div th:replace="${content}">
     <p>Layout content</p>
 </div>

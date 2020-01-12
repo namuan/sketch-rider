@@ -1,9 +1,6 @@
 package dev.deskriders.sketchrider.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import dev.deskriders.sketchrider.config.converter.LocalDateTimeDynamoDbConverter;
 import lombok.Data;
 
@@ -12,11 +9,11 @@ import java.time.LocalDateTime;
 @Data
 @DynamoDBTable(tableName = "sketch-rider")
 public class UserDiagramEntity {
-    @DynamoDBHashKey(attributeName = "DocId")
-    private String docId;
+    @DynamoDBHashKey(attributeName = "Id")
+    private String id;
 
-    @DynamoDBAttribute(attributeName = "OwnerId")
-    private String ownerId;
+    @DynamoDBRangeKey(attributeName = "Metadata")
+    private String metadata;
 
     @DynamoDBAttribute(attributeName = "DocumentCode")
     private String diagramCode;
@@ -25,11 +22,14 @@ public class UserDiagramEntity {
     @DynamoDBTypeConverted(converter = LocalDateTimeDynamoDbConverter.class)
     private LocalDateTime createdDateTime;
 
-    public boolean notOwnedBy(String ownerId) {
-        return !ownedBy(ownerId);
+    @DynamoDBAttribute(attributeName = "OwnerName")
+    private String ownerName;
+
+    public void setId(String id) {
+        this.id = "Owner-" + id;
     }
 
-    public boolean ownedBy(String ownerId) {
-        return this.ownerId.equals(ownerId);
+    public void setDocumentId(String docId) {
+        this.metadata = "Doc-" + docId;
     }
 }

@@ -10,6 +10,7 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.View;
 
 import javax.annotation.Nullable;
+import java.net.URI;
 
 @Controller
 public class HomeController {
@@ -18,6 +19,9 @@ public class HomeController {
     @View(value = "home/index")
     @Get(produces = MediaType.TEXT_HTML)
     public HttpResponse index(@Nullable Authentication authentication) {
+        if (authentication != null) {
+            return HttpResponse.temporaryRedirect(URI.create("/diagrams"));
+        }
         return HttpResponse.ok();
     }
 }

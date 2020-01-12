@@ -6,11 +6,13 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.View;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,7 +28,15 @@ public class DiagramController {
 
     @View(value = "diagrams/edit")
     @Get(value = "/diagrams/{diagramId}", produces = MediaType.TEXT_HTML)
-    public Map<String, Object> diagram(String diagramId) {
+    public Map<String, Object> editDiagram(String diagramId) {
         return CollectionUtils.mapOf("diagramId", diagramId);
+    }
+
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @View(value = "diagrams/index")
+    @Get(value = "/diagrams", produces = MediaType.TEXT_HTML)
+    public Map<String, Object> listDiagrams(Authentication authentication) {
+
+        return CollectionUtils.mapOf("diagrams", Collections.emptyList());
     }
 }

@@ -19,8 +19,8 @@ public class UserDiagramRepository {
 
     public String saveUserDiagram(String docId, String userId, String diagramCode) {
         UserDiagramEntity entity = new UserDiagramEntity();
-        entity.setDocId(docId);
-        entity.setOwnerId(userId);
+        entity.setId(userId);
+        entity.setDocumentId(docId);
         entity.setDiagramCode(diagramCode);
         entity.setCreatedDateTime(LocalDateTime.now());
         dbConfig.dynamoDbMapper().save(entity);
@@ -28,12 +28,13 @@ public class UserDiagramRepository {
         return docId;
     }
 
-    public void deleteUserDiagram(String ownerId, String diagramId) {
+    public void deleteUserDiagram(String ownerId, String docId) {
         UserDiagramEntity entity = new UserDiagramEntity();
-        entity.setDocId(diagramId);
+        entity.setId(ownerId);
+        entity.setDocumentId(docId);
         UserDiagramEntity existingUserDiagramEntity = dbConfig.dynamoDbMapper().load(entity);
-        if (existingUserDiagramEntity == null || existingUserDiagramEntity.notOwnedBy(ownerId)) {
-            throw new BadRequestException("Unable to find diagram " + diagramId);
+        if (existingUserDiagramEntity == null) {
+            throw new BadRequestException("Unable to find diagram " + docId);
         }
 
         dbConfig.dynamoDbMapper().delete(entity);

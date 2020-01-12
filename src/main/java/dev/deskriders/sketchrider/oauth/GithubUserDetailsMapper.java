@@ -9,6 +9,7 @@ import org.reactivestreams.Publisher;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Named("github")
@@ -29,7 +30,10 @@ public class GithubUserDetailsMapper implements OauthUserDetailsMapper {
                 .map(githubUser -> new UserDetails(
                         githubUser.getLogin(),
                         Collections.emptyList(),
-                        CollectionUtils.mapOf("id", sha(githubUser.getId()))
+                        CollectionUtils.mapOf(
+                                "id", sha(githubUser.getId()),
+                                "name", githubUser.getName()
+                        )
                 ));
     }
 
