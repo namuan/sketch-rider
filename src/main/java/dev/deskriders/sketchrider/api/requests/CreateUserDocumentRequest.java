@@ -13,14 +13,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @ToString
 @Introspected
-public class CreateUserDiagramRequest {
+public class CreateUserDocumentRequest {
 
     @NotNull
     @JsonProperty
-    String diagramCode;
+    String documentCode;
 
     @NotNull
     @JsonProperty
-    String docId;
+    String documentId;
 
 }

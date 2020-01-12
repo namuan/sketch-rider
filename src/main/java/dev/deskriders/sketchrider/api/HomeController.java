@@ -20,7 +20,7 @@ public class HomeController {
     @Get(produces = MediaType.TEXT_HTML)
     public HttpResponse index(@Nullable Authentication authentication) {
         if (authentication != null) {
-            return HttpResponse.temporaryRedirect(URI.create("/diagrams"));
+            return HttpResponse.temporaryRedirect(URI.create("/documents"));
         }
         return HttpResponse.ok();
     }

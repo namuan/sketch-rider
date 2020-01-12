@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @DynamoDBTable(tableName = "sketch-rider")
-public class UserDiagramEntity {
+public class UserDocumentEntity {
     @DynamoDBHashKey(attributeName = "Id")
     private String id;
 
@@ -16,7 +16,7 @@ public class UserDiagramEntity {
     private String metadata;
 
     @DynamoDBAttribute(attributeName = "DocumentCode")
-    private String diagramCode;
+    private String documentCode;
 
     @DynamoDBAttribute(attributeName = "CreatedDateTime")
     @DynamoDBTypeConverted(converter = LocalDateTimeDynamoDbConverter.class)
@@ -26,10 +26,26 @@ public class UserDiagramEntity {
     private String ownerName;
 
     public void setOwnerId(String id) {
-        this.id = "Owner-" + id;
+        if (id.startsWith("Owner-")) {
+            this.id = id;
+        } else {
+            this.id = "Owner-" + id;
+        }
     }
 
-    public void setDocumentId(String docId) {
-        this.metadata = "Doc-" + docId;
+    public String getOwnerId() {
+        return this.id;
+    }
+
+    public void setDocumentId(String documentId) {
+        if (documentId.startsWith("Document-")) {
+            this.metadata = documentId;
+        } else {
+            this.metadata = "Document-" + documentId;
+        }
+    }
+
+    public String getDocumentId() {
+        return this.metadata;
     }
 }

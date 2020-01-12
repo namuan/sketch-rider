@@ -1,0 +1,93 @@
+<html lang="en" th:replace="~{fragments/layout :: layout(~{::title}, ~{::#content}, ~{::script})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SketchRider :: Document</title>
+</head>
+<div id="content" class="container-fluid">
+
+    <h1>PlantUML Editor :: <span th:text="${documentId}"></span></h1>
+    <div class="row">
+        <div class="col-5">
+            <form>
+                <input id="documentId" type="hidden" th:value="${documentId}">
+                <button class="btn btn-primary" id="btn-render-document">Build</button>
+                <button th:if="${security}" class="btn btn-secondary" id="btn-save-document">Save</button>
+                <button th:if="${security}" class="btn btn-secondary" id="btn-delete-document">Delete</button>
+                <div class="form-group">
+                    <label for="document-source">Document source</label>
+                    <textarea class="form-control" id="document-source" rows="10" th:utext="${documentCode}">A-B:test</textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class="col">
+            <p>Generated Document</p>
+            <div>
+                <img id="document" src="/static/images/stock-plantuml.jpg"></img>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function compress(e) {
+        e = unescape(encodeURIComponent(e));
+        return encode64(RawDeflate.deflate(e));
+    }
+
+    $(document).ready(function () {
+        $("#btn-render-document").click(function (ev) {
+            ev.preventDefault();
+
+            const documentSource = $('#document-source').val();
+            const wrappedDocumentSource = "@startuml\n" + documentSource + "\n@enduml";
+            const encodedString = compress(wrappedDocumentSource);
+            const documentUrl = "/render/" + encodedString + "?dt=puml";
+            $("#document").attr("src", documentUrl);
+        });
+
+        $("#btn-save-document").click(function (ev) {
+            ev.preventDefault();
+
+            const documentId = $('#documentId').val();
+            const documentSource = $('#document-source').val();
+            const wrappedDocumentSource = "@startuml\n" + documentSource + "\n@enduml";
+            const encodedString = compress(wrappedDocumentSource);
+            $.ajax({
+                type: 'POST',
+                url: '/user-documents',
+                data: JSON.stringify({documentId: documentId, documentCode: encodedString}),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    alert("Success: " + data.id);
+                },
+                error: function (jqXHR, textStatus, err) {
+                    alert("Error saving " + documentId + " due to " + err);
+                }
+            });
+        });
+
+        $("#btn-delete-document").click(function (ev) {
+            ev.preventDefault();
+
+            const documentId = $('#documentId').val();
+            $.ajax({
+                type: 'DELETE',
+                url: '/user-documents/' + documentId,
+                success: function () {
+                    alert("Deleted: " + documentId);
+                    window.location.replace("/");
+                },
+                error: function (jqXHR, textStatus, error) {
+                    alert("Error saving " + documentId + " due to " + error);
+                }
+            })
+        });
+    });
+</script>
+
+</html>

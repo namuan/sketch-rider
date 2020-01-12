@@ -5,16 +5,16 @@
 </head>
 <body>
 <div id="content">
-    <form action="/diagrams/new">
-        <button class="btn btn-primary">Create New Diagram</button>
+    <form action="/documents/new">
+        <button class="btn btn-primary">Create New Document</button>
     </form>
-    <h2>List Diagrams</h2>
+    <h2>List Documents</h2>
     <table>
         <tr>
             <th>Id</th>
         </tr>
-        <tr th:each="diagram : ${diagrams}">
-            <td><a th:href="@{/diagrams/{diagramId}(diagramId=${diagram.metadata})}" th:text="'Go to ' + ${diagram.metadata}"></a></td>
+        <tr th:each="document : ${documents}">
+            <td><a th:href="@{/documents/{documentId}(documentId=${document.metadata})}" th:text="'Go to ' + ${document.metadata}"></a></td>
         </tr>
     </table>
 </div>

@@ -14,12 +14,12 @@ public class PlantUmlRenderer {
 
     TranscoderSmart transcoder = new TranscoderSmart();
 
-    public byte[] renderDiagram(String encodedDiagramSource) throws IOException {
-        String deflatedDiagramSource = transcoder.decode(encodedDiagramSource);
-        SourceStringReader sourceStringReader = new SourceStringReader(deflatedDiagramSource);
-        ByteArrayOutputStream plantUmlDiagramStream = new ByteArrayOutputStream();
-        sourceStringReader.outputImage(plantUmlDiagramStream);
-        return plantUmlDiagramStream.toByteArray();
+    public byte[] renderDocument(String encodedDocumentSource) throws IOException {
+        String deflatedDocumentSource = transcoder.decode(encodedDocumentSource);
+        SourceStringReader sourceStringReader = new SourceStringReader(deflatedDocumentSource);
+        ByteArrayOutputStream plantUmlDocumentStream = new ByteArrayOutputStream();
+        sourceStringReader.outputImage(plantUmlDocumentStream);
+        return plantUmlDocumentStream.toByteArray();
     }
 
 }

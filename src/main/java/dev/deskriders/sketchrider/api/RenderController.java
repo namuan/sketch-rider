@@ -20,7 +20,7 @@ import java.util.Optional;
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class RenderController {
 
-    public static final String DEFAULT_DIAGRAM_TYPE = "puml";
+    public static final String DEFAULT_DOCUMENT_TYPE = "puml";
 
     private PlantUmlRenderer plantUmlRenderer;
 
@@ -28,11 +28,11 @@ public class RenderController {
         this.plantUmlRenderer = plantUmlRenderer;
     }
 
-    @Get(value = "/render/{diagramSource}{?dt}")
-    public HttpResponse renderDiagram(@PathVariable String diagramSource, @QueryValue Optional<String> dt) throws URISyntaxException, IOException {
-        String diagramType = dt.orElse(DEFAULT_DIAGRAM_TYPE);
-        byte[] diagramBytes = plantUmlRenderer.renderDiagram(diagramSource);
-        return HttpResponse.ok(diagramBytes)
+    @Get(value = "/render/{documentSource}{?dt}")
+    public HttpResponse renderDocument(@PathVariable String documentSource, @QueryValue Optional<String> dt) throws URISyntaxException, IOException {
+        String documentType = dt.orElse(DEFAULT_DOCUMENT_TYPE);
+        byte[] documentBytes = plantUmlRenderer.renderDocument(documentSource);
+        return HttpResponse.ok(documentBytes)
                 .header("Content-Type", MediaType.IMAGE_JPEG);
     }
 
