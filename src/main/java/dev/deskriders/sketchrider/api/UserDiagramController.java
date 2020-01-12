@@ -5,16 +5,15 @@ import dev.deskriders.sketchrider.repository.UserDiagramRepository;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Delete;
-import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.views.View;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.Map;
 
 @Slf4j

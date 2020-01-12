@@ -5,10 +5,18 @@
 </head>
 <body>
 <div id="content">
-    <h2>List Diagrams</h2>
     <form action="/diagrams/new">
         <button class="btn btn-primary">Create New Diagram</button>
     </form>
+    <h2>List Diagrams</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+        </tr>
+        <tr th:each="diagram : ${diagrams}">
+            <td><a th:href="@{/diagrams/{diagramId}(diagramId=${diagram.metadata})}" th:text="'Go to ' + ${diagram.metadata}"></a></td>
+        </tr>
+    </table>
 </div>
 </body>
 

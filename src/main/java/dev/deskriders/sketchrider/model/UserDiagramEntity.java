@@ -25,7 +25,7 @@ public class UserDiagramEntity {
     @DynamoDBAttribute(attributeName = "OwnerName")
     private String ownerName;
 
-    public void setId(String id) {
+    public void setOwnerId(String id) {
         this.id = "Owner-" + id;
     }
 
