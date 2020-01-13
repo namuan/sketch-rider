@@ -12,11 +12,13 @@
     <table>
         <tr>
             <th>Id</th>
+            <th>Title</th>
             <th>Type</th>
             <th>Status</th>
         </tr>
         <tr th:each="document : ${documents}">
             <td><a th:href="@{/documents/{documentId}(documentId=${document.metadata})}" th:text="${document.metadata}"></a></td>
+            <td th:text="${document.documentTitle}"></td>
             <td th:text="${document.documentType}"></td>
             <td th:text="${document.documentStatus}"></td>
         </tr>

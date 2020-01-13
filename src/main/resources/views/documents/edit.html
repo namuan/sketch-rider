@@ -9,13 +9,15 @@
     <div class="row">
         <div class="col-5">
             <form>
-                <input id="documentId" type="hidden" th:value="${documentId}">
+                <input th:if="${security}" id="documentTitle" type="text" th:value="${documentTitle}">
+                <input th:if="${security}" id="documentId" type="hidden" th:value="${documentId}">
                 <button class="btn btn-primary" id="btn-render-document">Build</button>
                 <button th:if="${security}" class="btn btn-secondary" id="btn-save-document">Save</button>
                 <button th:if="${security}" class="btn btn-secondary" id="btn-delete-document">Delete</button>
                 <div class="form-group">
                     <label for="document-source">Document source</label>
-                    <textarea class="form-control" id="document-source" rows="10" th:utext="${documentCode}">A-B:test</textarea>
+                    <textarea class="form-control" id="document-source" rows="10"
+                              th:utext="${documentCode}">A-B:test</textarea>
                 </div>
             </form>
         </div>
@@ -52,13 +54,19 @@
             ev.preventDefault();
 
             const documentId = $('#documentId').val();
+            const documentTitle = $('#documentTitle').val();
             const documentSource = $('#document-source').val();
             const wrappedDocumentSource = "@startuml\n" + documentSource + "\n@enduml";
             const encodedString = compress(wrappedDocumentSource);
             $.ajax({
                 type: 'POST',
                 url: '/user-documents',
-                data: JSON.stringify({documentId: documentId, documentCode: encodedString, documentType: 'puml'}),
+                data: JSON.stringify({
+                    id: documentId,
+                    code: encodedString,
+                    type: 'puml',
+                    title: documentTitle
+                }),
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {

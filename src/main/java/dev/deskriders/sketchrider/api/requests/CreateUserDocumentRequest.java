@@ -17,14 +17,16 @@ public class CreateUserDocumentRequest {
 
     @NotNull
     @JsonProperty
-    String documentCode;
+    String code;
 
     @NotNull
     @JsonProperty
-    String documentId;
+    String id;
 
     @NotNull
     @JsonProperty
-    String documentType;
+    String type;
 
+    @JsonProperty
+    String title;
 }

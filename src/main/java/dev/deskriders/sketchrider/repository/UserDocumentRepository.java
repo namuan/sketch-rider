@@ -26,14 +26,17 @@ public class UserDocumentRepository {
     public String saveUserDocument(String ownerId, CreateUserDocumentRequest documentRequest) {
         UserDocumentEntity entity = new UserDocumentEntity();
         entity.setOwnerId(ownerId);
-        entity.setDocumentId(documentRequest.getDocumentId());
-        entity.setDocumentCode(documentRequest.getDocumentCode());
+        entity.setDocumentId(documentRequest.getId());
+        entity.setDocumentCode(documentRequest.getCode());
         entity.setCreatedDateTime(LocalDateTime.now());
-        entity.setDocumentType(documentRequest.getDocumentType());
+        entity.setDocumentType(documentRequest.getType());
         entity.setDocumentStatus(DocumentStatus.ACTIVE.name());
+        entity.setDocumentTitle(documentRequest.getTitle());
+
         dbConfig.dynamoDbMapper().save(entity);
-        log.info("Created document {} for user {}", documentRequest.getDocumentId(), ownerId);
-        return documentRequest.getDocumentId();
+
+        log.info("Created document {} for user {}", documentRequest.getId(), ownerId);
+        return documentRequest.getId();
     }
 
     public void deleteUserDocument(String ownerId, String documentId) {

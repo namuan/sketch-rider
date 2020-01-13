@@ -25,6 +25,9 @@ public class UserDocumentEntity {
     @DynamoDBAttribute(attributeName = "OwnerName")
     private String ownerName;
 
+    @DynamoDBAttribute(attributeName = "DocumentTitle")
+    private String documentTitle;
+
     @DynamoDBAttribute(attributeName = "DocumentType")
     private String documentType;
 

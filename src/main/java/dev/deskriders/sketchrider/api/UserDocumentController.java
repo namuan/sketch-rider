@@ -36,7 +36,7 @@ public class UserDocumentController {
                 createUserDocumentRequest
         );
 
-        return HttpResponse.created(CollectionUtils.mapOf("id", createUserDocumentRequest.getDocumentId()));
+        return HttpResponse.created(CollectionUtils.mapOf("id", createUserDocumentRequest.getId()));
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)

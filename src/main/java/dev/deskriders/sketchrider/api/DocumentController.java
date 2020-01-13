@@ -43,19 +43,22 @@ public class DocumentController {
     @Get(value = "/documents/{documentId}", produces = MediaType.TEXT_HTML)
     public Map<String, Object> editDocument(String documentId, @Nullable Authentication authentication) throws IOException {
         String defaultDocumentCode = "@startuml\nA->B: test\nB->C: hello\n@enduml";
+        String defaultDocumentTitle = "Enter title...";
+
         if (authentication != null) {
             String ownerId = (String) authentication.getAttributes().get("id");
             UserDocumentEntity userDocumentEntity = userDocumentRepository.loadUserDocument(ownerId, documentId);
             if (userDocumentEntity == null) {
-                return CollectionUtils.mapOf("documentId", documentId, "documentCode", defaultDocumentCode);
+                return CollectionUtils.mapOf("documentId", documentId, "documentTitle", defaultDocumentTitle, "documentCode", defaultDocumentCode);
             } else {
                 return CollectionUtils.mapOf(
                         "documentId", userDocumentEntity.getDocumentId(),
+                        "documentTitle", userDocumentEntity.getDocumentTitle(),
                         "documentCode", this.plantUmlRenderer.convertToSource(userDocumentEntity.getDocumentCode())
                 );
             }
         }
-        return CollectionUtils.mapOf("documentId", documentId, "documentCode", defaultDocumentCode);
+        return CollectionUtils.mapOf("documentId", documentId, "documentTitle", defaultDocumentTitle, "documentCode", defaultDocumentCode);
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
