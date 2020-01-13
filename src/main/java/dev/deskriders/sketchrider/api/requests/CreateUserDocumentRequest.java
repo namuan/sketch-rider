@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 
 @Getter
+@Setter
 @ToString
 @Introspected
 public class CreateUserDocumentRequest {

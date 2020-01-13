@@ -1,18 +1,24 @@
 package dev.deskriders.sketchrider.repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.util.StringUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.deskriders.sketchrider.api.exception.BadRequestException;
 import dev.deskriders.sketchrider.api.requests.CreateUserDocumentRequest;
 import dev.deskriders.sketchrider.config.DbConfig;
 import dev.deskriders.sketchrider.model.DocumentStatus;
 import dev.deskriders.sketchrider.model.UserDocumentEntity;
+import dev.deskriders.sketchrider.util.DocumentCursor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Singleton;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Singleton
@@ -24,6 +30,9 @@ public class UserDocumentRepository {
     }
 
     public String saveUserDocument(String ownerId, CreateUserDocumentRequest documentRequest) {
+//        @todo: Detect if this is called to create a new document
+//        or to update an existing document
+//        @todo: Use CreatedDate in the SortKey - Doc-{LocalDate}-{UUID}
         UserDocumentEntity entity = new UserDocumentEntity();
         entity.setOwnerId(ownerId);
         entity.setDocumentId(documentRequest.getId());
@@ -49,14 +58,30 @@ public class UserDocumentRepository {
         dbConfig.dynamoDbMapper().save(existingUserDocumentEntity);
     }
 
-    public List<UserDocumentEntity> listUserDocuments(String ownerId) {
-        DynamoDBQueryExpression<UserDocumentEntity> queryExpression =
-                new DynamoDBQueryExpression<>();
+    public QueryResultPage<UserDocumentEntity> listUserDocuments(String ownerId, String cursor, String direction) throws IOException {
         UserDocumentEntity hkValue = new UserDocumentEntity();
         hkValue.setOwnerId(ownerId);
-        queryExpression.withHashKeyValues(hkValue);
-        PaginatedQueryList<UserDocumentEntity> queryList = dbConfig.dynamoDbMapper().query(UserDocumentEntity.class, queryExpression);
-        return new ArrayList<>(queryList);
+
+        DynamoDBQueryExpression<UserDocumentEntity> queryExpression = new DynamoDBQueryExpression<>();
+        queryExpression
+                .withHashKeyValues(hkValue)
+                .withLimit(10);
+
+        if (StringUtils.isNullOrEmpty(direction) || direction.equals("fwd")) {
+            queryExpression.withScanIndexForward(true);
+        } else {
+            queryExpression.withScanIndexForward(false);
+        }
+
+        if (!StringUtils.isNullOrEmpty(cursor)) {
+            String decompressedCursor = DocumentCursor.deCompress(cursor);
+            Map<String, AttributeValue> cursorValue = new ObjectMapper()
+                    .readValue(decompressedCursor, new TypeReference<Map<String, AttributeValue>>() {
+                    });
+            queryExpression.withExclusiveStartKey(cursorValue);
+        }
+
+        return dbConfig.dynamoDbMapper().queryPage(UserDocumentEntity.class, queryExpression);
     }
 
     public UserDocumentEntity loadUserDocument(String ownerId, String documentId) {

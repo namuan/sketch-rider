@@ -9,6 +9,9 @@
         <button class="btn btn-primary">Create New Document</button>
     </form>
     <h2>List Documents</h2>
+    <a th:href="@{/documents(nPage=${next}, dir='back')}">Prev</a> |
+    <a th:href="@{/documents(nPage=${next}, dir='fwd')}">Next</a>
+    <br/>
     <table>
         <tr>
             <th>Id</th>

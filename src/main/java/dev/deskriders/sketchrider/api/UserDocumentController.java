@@ -12,7 +12,9 @@ import io.micronaut.security.rules.SecurityRule;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -22,6 +24,23 @@ public class UserDocumentController {
 
     public UserDocumentController(UserDocumentRepository userDocumentRepository) {
         this.userDocumentRepository = userDocumentRepository;
+    }
+
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Get(value = "/user-documents/generate")
+    public HttpResponse createData(Authentication authentication) {
+        String ownerId = (String) authentication.getAttributes().get("id");
+        for(int i=0;i < 1000; i++) {
+            LocalDate localDate = LocalDate.now().minusDays(i);
+            String docId = UUID.randomUUID().toString();
+            CreateUserDocumentRequest request = new CreateUserDocumentRequest();
+            request.setCode("Hello World " + i);
+            request.setId(localDate + " - " + docId + " ");
+            request.setTitle("Title " + localDate + "-" + i + " ");
+            request.setType("puml");
+            userDocumentRepository.saveUserDocument(ownerId, request);
+        }
+        return HttpResponse.ok();
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
